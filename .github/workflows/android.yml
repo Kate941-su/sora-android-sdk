@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    paths-ignore:
+      - 'README.md'
+      - 'CHANGES.md'
+      - 'LICENSE'
+      - 'THANKS'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '18'
+          cache: 'gradle'
+      - name: Copy gradle.properties
+        run: cp gradle.properties.example gradle.properties
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Lint Check
+        run: ./gradlew ktlintCheck
